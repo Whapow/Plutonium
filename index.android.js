@@ -1,30 +1,90 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
+/*
+   Sample React Native App
+   https://github.com/facebook/react-native
+*/
 'use strict';
 import React, {
   AppRegistry,
   Component,
   Image,
+  Navigator,
   StyleSheet,
   Text,
+  TouchableOpacity,
+  TouchableHighlight,
   View
 } from 'react-native';
 
+var SplashPage = require('./pages/SplashPage');
+var LoginPage = require('./pages/LoginPage');
+var MainPage = require('./pages/MainPage');
+var PersonPage = require('./pages/PersonPage');
+var NoNavigatorPage = require('./pages/NoNavigatorPage');
+
 class Plutonium extends Component {
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
+
+      <Navigator
+        initialRoute={{id: 'SplashPage', name: 'index'}}
+        renderScene = {this.renderScene.bind(this)}
+        configureScene={(route) => {
+        if (route.sceneConfig) {
+          return route.sceneConfig;
+        }
+        return Navigator.SceneConfigs.FloatFromRight;
+       }} />
+    );
+  }
+
+  renderScene(route, navigator) {
+    var routeId = route.id;
+    if (routeId === 'SplashPage') {
+      return (
+        <SplashPage
+          navigator={navigator} />
+      );
+    }
+    if (routeId === 'LoginPage') {
+      return (
+        <LoginPage
+          navigator={navigator} />
+      );
+    }
+    if (routeId === 'MainPage') {
+      return (
+        <MainPage
+          navigator={navigator} />
+      );
+    }
+    if (routeId === 'PersonPage') {
+      return (
+        <PersonPage
+          navigator={navigator} />
+      );
+    }
+    if (routeId === 'NoNavigatorPage') {
+      return (
+        <NoNavigatorPage
+          navigator={navigator} />
+      );
+    }
+    return this.noRoute(navigator);
+  }
+
+  noRoute(navigator){
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <TouchableHighlight
+            onPress={
+              this.props.navigator.push({
+                id: 'MainPage',
+                name: 'Home',
+              })
+            }>
+          <Text style={{color: 'red'}}>404</Text>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -42,10 +102,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  back: {
+    textAlignVertical: 'bottom',
+    textAlign: 'left',
+    color: '#0000FF',
+  },
+  next: {
+    textAlignVertical: 'bottom',
+    textAlign: 'right',
+    color: '#0000FF',
+
   },
 });
 
